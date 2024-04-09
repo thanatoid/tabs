@@ -5,8 +5,8 @@
 }('tabs', function() {
 
   return function tabs(container) {
-    var tabs = container.querySelectorAll('.tab');
-    var panes = container.querySelectorAll('.tab-pane');
+    let tabs = container.querySelectorAll('.tab');
+    let panes = container.querySelectorAll('.tab-pane');
 
     each(tabs, function(i, tab) {
       tab.addEventListener('click', function(e) {
@@ -17,7 +17,7 @@
 
     function activate(tabs, index) {
       each(tabs, function(i, tab) {
-        if (i != index) {
+        if (i !== index) {
           removeClass(tab, 'active')
         } else {
           addClass(tab, 'active')
@@ -27,13 +27,13 @@
   }
 
   function each(elements, fn) {
-    for (var i = elements.length - 1; i >= 0; i--) {
+    for (let i = elements.length - 1; i >= 0; i--) {
       fn(i, elements[i]);
     }
   }
 
   function hasClass(el, cls) {
-    return el.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+    return el.className.match(new RegExp('\\b'+cls+'\\b'));
   }
 
   function addClass(el, cls) {
@@ -43,9 +43,10 @@
   }
 
   function removeClass(el, cls) {
-    if (hasClass(el, cls)) {
-      var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
-      el.className = el.className.replace(reg, '');
-    }
+    if (!hasClass(el, cls)) return;
+
+    //use word boundary rather than spaces to allow for addl classes
+    el.className = el.className.replace(new RegExp('\\b'+cls+'\\b'), '');
+    el.className = el.className.replace(new RegExp('\\s{2,}'), ' ');//reduce multiple spaces
   }
 });
